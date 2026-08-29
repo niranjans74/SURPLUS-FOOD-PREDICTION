@@ -1,0 +1,22 @@
+SIMULATED SURPLUS FOOD PREDICTION MODEL EVALUATION REPORT
+========================================================
+
+Best Model Selected: Linear Regression
+Best Model R2 Score: 0.9350
+
+Model Performance Summary:
+
+Linear Regression:
+  MAE: 8.1438 kg
+  RMSE: 11.1294 kg
+  R2: 0.935
+
+Decision Tree Regressor:
+  MAE: 21.9287 kg
+  RMSE: 31.328 kg
+  R2: 0.4847
+
+Random Forest Regressor:
+  MAE: 10.7857 kg
+  RMSE: 14.7926 kg
+  R2: 0.8851

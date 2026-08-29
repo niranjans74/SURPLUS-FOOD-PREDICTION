@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-green-50: #ecfdf5;
+  --color-brand-green-100: #d1fae5;
+  --color-brand-green-500: #059669;
+  --color-brand-green-600: #047857;
+  --color-brand-green-700: #065f46;
+  
+  --color-brand-orange-50: #fffbeb;
+  --color-brand-orange-100: #fef3c7;
+  --color-brand-orange-500: #d97706;
+  --color-brand-orange-600: #b45309;
+  --color-brand-orange-700: #92400e;
+  
+  --color-dark-bg: #090d16;
+  --color-dark-card: #111a2e;
+  --color-dark-border: rgba(255, 255, 255, 0.07);
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased font-sans transition-colors duration-300;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dark body {
+    @apply bg-dark-bg text-slate-100;
+  }
+}
+
+/* Glassmorphism utility classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(5, 150, 105, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+}
+
+.dark .glass-panel,
+@media (prefers-color-scheme: dark) {
+  .glass-panel {
+    background: rgba(11, 19, 35, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(5, 150, 105, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(5, 150, 105, 0.1);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .glass-card,
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: rgba(17, 26, 46, 0.95) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(5, 150, 105, 0.25) !important;
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Interactive hover scales */
+.hover-scale {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-scale:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 12px 24px -10px rgba(5, 150, 105, 0.15), 0 8px 16px -8px rgba(5, 150, 105, 0.1);
+}
+
+/* Mouse-responsive Ambient Glow Spotlight */
+.mouse-glow-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.mouse-glow-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    550px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(5, 150, 105, 0.09) 0%,
+    rgba(217, 119, 6, 0.03) 50%,
+    transparent 100%
+  );
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.mouse-glow-container:hover::before {
+  opacity: 1;
+}
+
+.mouse-glow-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Dynamic input fields focus outline */
+input:focus, select:focus, textarea:focus {
+  @apply ring-2 ring-brand-green-500/30 border-brand-green-500/80 outline-none shadow-sm;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  z-index: 10;
+}
+

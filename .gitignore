@@ -1,0 +1,11 @@
+.env
+*.db
+*.db-journal
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+.gemini/
+.agents/
+.cortex/
+*.log
