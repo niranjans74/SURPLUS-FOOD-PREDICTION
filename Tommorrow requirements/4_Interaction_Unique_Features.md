@@ -1,31 +1,101 @@
 # User Interaction & Unique Features
 
-This section details how the front-end and back-end interact, along with the unique features that differentiate this project.
+This section describes how the front-end and back-end components of the **ResqFood Link Platform** communicate with each other and highlights the unique features and design decisions that distinguish the platform.
 
 ## 1. Front-End and Back-End Interaction
 
-### A. API Request & Response Architecture
-The frontend React app communicates with the backend FastAPI application asynchronously using **Axios**:
-*   **JSON Schema Validation**: Frontend forms serialize inputs matching Pydantic schemas defined on the backend (e.g. `UserLogin`, `PredictionRequest`).
-*   **JWT Token Authorization**: Once logged in, the frontend stores the JSON Web Token in `localStorage`. An Axios request interceptor injects the token into the `Authorization: Bearer <TOKEN>` header of all subsequent API calls.
-*   **Dynamic CORS Policy**: Enables seamless request handling between the GitHub Pages hosted frontend and the Render hosted backend API.
+### A. API Request and Response Architecture
+
+The React-based frontend communicates asynchronously with the **FastAPI backend** using **Axios**. This architecture enables secure and efficient data exchange between the user interface and server-side services.
+
+### JSON Schema Validation
+
+Frontend forms collect user inputs and serialize them into JSON structures that match the **Pydantic schemas** defined by the backend.
+
+Examples include:
+
+* `UserLogin` – Validates user login information.
+* `PredictionRequest` – Handles inputs required for surplus food prediction.
+
+This ensures that data sent from the frontend follows the expected backend structure.
+
+### JWT Token Authorization
+
+After successful authentication, the backend generates a **JSON Web Token (JWT)**.
+
+The frontend stores the token in `localStorage`. An Axios request interceptor automatically attaches the token to subsequent API requests using the following authorization format:
+
+`Authorization: Bearer <TOKEN>`
+
+This mechanism allows the backend to authenticate users and enforce role-based access to protected resources.
+
+### Dynamic CORS Policy
+
+The backend uses a dynamic **Cross-Origin Resource Sharing (CORS)** configuration to allow communication between the deployed frontend and backend.
+
+This enables the **GitHub Pages-hosted frontend** to securely communicate with the **Render-hosted FastAPI backend API**.
 
 ---
 
-## 2. Unique Features and Design Decisions
+# 2. Unique Features and Design Decisions
 
-### A. Machine Learning Surplus Forecasting
-*   Utilizes a linear regression pipeline trained on food category, prepared quantity, event type, and attendance ratios.
-*   *Design Decision*: Built with a robust fallback heuristic to handle missing ML pipeline artifacts seamlessly without crashing the application.
+## A. Machine Learning Surplus Forecasting
 
-### B. Weighted NGO Compatibility Scoring
-*   ranks eligible NGOs for a donation request using a multi-criteria scoring algorithm:
-    *   **30% Compatibility**: Food category alignment.
-    *   **25% Distance**: Proximity using latitudinal/longitudinal coordinates.
-    *   **20% Quantity Fit**: Daily capacity matching donation size.
-    *   **15% Capacity**: Excess storage capability.
-    *   **10% Urgency**: Expiry time and food type perishability.
+The platform incorporates a **Machine Learning-based surplus forecasting system** to estimate the quantity of excess food that may be available for redistribution.
 
-### C. Live Interactive Route Geometry
-*   Instead of static maps, the system uses Leaflet and OpenStreetMap.
-*   Queries the OSRM (Open Source Routing Machine) API to fetch exact road geometry, rendering real-time route lines, turn-by-turn distance details, and estimated transit times.
+The prediction pipeline considers factors such as:
+
+* Food category
+* Prepared food quantity
+* Event type
+* Attendance ratio
+* Historical event patterns
+
+A **Linear Regression** model is used to generate the surplus prediction.
+
+### Fallback Mechanism
+
+A robust fallback heuristic is implemented alongside the ML pipeline. If the trained ML model or required pipeline artifacts are unavailable, the system can use the fallback mechanism instead of crashing.
+
+This improves the reliability and availability of the application.
+
+---
+
+## B. Weighted NGO Compatibility Scoring
+
+The platform uses a **multi-criteria scoring algorithm** to rank eligible NGOs and identify the most suitable organization for a particular donation.
+
+The scoring system considers the following factors:
+
+| Criteria      | Weight | Purpose                                                           |
+| ------------- | -----: | ----------------------------------------------------------------- |
+| Compatibility |    30% | Measures alignment between the food category and NGO requirements |
+| Distance      |    25% | Evaluates the proximity between donor and NGO                     |
+| Quantity Fit  |    20% | Determines whether the NGO can handle the donation quantity       |
+| Capacity      |    15% | Considers the NGO's available storage capacity                    |
+| Urgency       |    10% | Considers expiry time and food perishability                      |
+
+The final ranking helps donors identify NGOs that are most appropriate for receiving their available surplus food.
+
+---
+
+## C. Live Interactive Route Geometry
+
+Instead of displaying only static map locations, the platform provides **interactive route visualization**.
+
+The system uses:
+
+* **Leaflet** for interactive map rendering
+* **OpenStreetMap** for map data
+* **OSRM (Open Source Routing Machine)** for route calculation and geometry
+
+The OSRM service is queried to obtain road-based routing information between the donor and recommended NGO.
+
+The resulting route is displayed as an interactive line on the map and can provide information such as:
+
+* Actual road route
+* Travel distance
+* Estimated transit time
+* Route geometry
+
+This feature allows donors and NGOs to better understand the logistics involved in collecting and transporting surplus food.
