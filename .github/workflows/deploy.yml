@@ -33,6 +33,8 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: frontend
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
       - name: Create 404 page for SPA routing
         run: cp frontend/dist/index.html frontend/dist/404.html
