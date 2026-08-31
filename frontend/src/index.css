@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-green-50: #ecfdf5;
   --color-brand-green-100: #d1fae5;
@@ -39,7 +41,14 @@
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
 }
 
-.dark .glass-panel,
+.dark .glass-panel {
+  background: rgba(11, 19, 35, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
 @media (prefers-color-scheme: dark) {
   .glass-panel {
     background: rgba(11, 19, 35, 0.85);
@@ -59,7 +68,15 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark .glass-card,
+.dark .glass-card {
+  background: rgba(17, 26, 46, 0.95) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 @media (prefers-color-scheme: dark) {
   .glass-card {
     background: rgba(17, 26, 46, 0.95) !important;

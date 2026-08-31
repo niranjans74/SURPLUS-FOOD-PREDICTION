@@ -45,10 +45,7 @@ def predict_surplus(
             detail="Active donor profile is required to generate surplus forecasts."
         )
 
-    # 1. Fetch ML model
-    model = get_ml_model()
-
-    # 2. Build input dataframe matching columns used during training
+    # 1. Build input dataframe matching columns used during training
     input_data = {
         'donor_type': [donor_profile.donor_type],
         'food_category': [req.food_category],

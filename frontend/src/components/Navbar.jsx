@@ -1,11 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Leaf, LogOut, LayoutDashboard } from 'lucide-react';
+import { Leaf, LogOut, LayoutDashboard, Sun, Moon } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains('dark')
+  );
+
+  const toggleTheme = () => {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDark(true);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -23,6 +39,20 @@ export default function Navbar() {
         <Link to="/" className="hover:text-brand-green-600 dark:hover:text-brand-green-500 transition-colors">Home</Link>
         <Link to="/about" className="hover:text-brand-green-600 dark:hover:text-brand-green-500 transition-colors">About</Link>
         <Link to="/contact" className="hover:text-brand-green-600 dark:hover:text-brand-green-500 transition-colors">Contact</Link>
+        
+        {/* Theme Switcher Toggle */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl transition-all focus:outline-none cursor-pointer"
+          title={isDark ? "Activate Light Mode" : "Activate Dark Mode"}
+        >
+          {isDark ? (
+            <Sun className="w-5 h-5 text-amber-500 transition-all hover:rotate-45" />
+          ) : (
+            <Moon className="w-5 h-5 text-indigo-500 dark:text-indigo-400 transition-all hover:-rotate-12" />
+          )}
+        </button>
         
         {user ? (
           <div className="flex items-center gap-4">

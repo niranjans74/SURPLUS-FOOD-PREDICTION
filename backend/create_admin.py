@@ -11,7 +11,7 @@ def create_admin():
     db: Session = SessionLocal()
     try:
         email = "admin@platform.org"
-        password = "Admin@2026"
+        password = "admin123"
         
         # Check if user already exists
         existing_admin = db.query(models.User).filter(models.User.email == email).first()

@@ -54,7 +54,7 @@ def seed_db():
         # 1. Admin User
         admin_user = models.User(
             email="admin@platform.org",
-            password_hash=hash_password("Admin@2026"),
+            password_hash=hash_password("admin123"),
             role="admin",
             name="System Admin (Simulated)",
             phone="+1-555-0100"
