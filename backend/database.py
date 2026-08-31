@@ -14,29 +14,36 @@ DB_NAME = os.getenv("DB_NAME", "food_redistribution")
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    "sqlite:///./food_redistribution.db"
 )
 
-# Robust database engine initialization with SQLite fallback
+# Robust database engine initialization
+is_sqlite = DATABASE_URL.startswith("sqlite")
 try:
-    print(f"Attempting to connect to MySQL database at {DB_HOST}:{DB_PORT}...")
-    engine = create_engine(
-        DATABASE_URL,
-        pool_pre_ping=True,
-        connect_args={"connect_timeout": 5} # Fast timeout to fallback quickly
-    )
-    # Test connection
-    conn = engine.connect()
-    conn.close()
-    print("Database connection to MySQL succeeded.")
+    if is_sqlite:
+        engine = create_engine(
+            DATABASE_URL,
+            connect_args={"check_same_thread": False}
+        )
+    else:
+        print(f"Attempting to connect to database at {DATABASE_URL}...")
+        engine = create_engine(
+            DATABASE_URL,
+            pool_pre_ping=True
+        )
+        # Test connection
+        conn = engine.connect()
+        conn.close()
+        print("Database connection succeeded.")
 except Exception as e:
-    print(f"MySQL connection failed: {e}")
-    print("Fallback activated: Initializing SQLite database (food_redistribution.db) for local execution.")
-    SQLITE_URL = "sqlite:///./food_redistribution.db"
-    engine = create_engine(
-        SQLITE_URL,
-        connect_args={"check_same_thread": False}
-    )
+    print(f"Database connection failed: {e}")
+    if not is_sqlite:
+        print("Fallback activated: Initializing SQLite database (food_redistribution.db) for local execution.")
+        DATABASE_URL = "sqlite:///./food_redistribution.db"
+        engine = create_engine(
+            DATABASE_URL,
+            connect_args={"check_same_thread": False}
+        )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

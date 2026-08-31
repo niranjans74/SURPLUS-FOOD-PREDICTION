@@ -13,27 +13,31 @@ load_dotenv()
 
 def seed_db():
     print("Ensuring database exists...")
-    try:
-        db_user = os.getenv("DB_USER", "root")
-        db_pass = os.getenv("DB_PASSWORD", "admin")
-        db_host = os.getenv("DB_HOST", "127.0.0.1")
-        db_port = int(os.getenv("DB_PORT", "3306"))
-        db_name = os.getenv("DB_NAME", "food_redistribution")
+    db_url = os.getenv("DATABASE_URL", "sqlite:///./food_redistribution.db")
+    if db_url.startswith("sqlite"):
+        print("Using SQLite database. Skipping MySQL database pre-creation check.")
+    else:
+        try:
+            db_user = os.getenv("DB_USER", "root")
+            db_pass = os.getenv("DB_PASSWORD", "admin")
+            db_host = os.getenv("DB_HOST", "127.0.0.1")
+            db_port = int(os.getenv("DB_PORT", "3306"))
+            db_name = os.getenv("DB_NAME", "food_redistribution")
 
-        conn = pymysql.connect(
-            host=db_host,
-            user=db_user,
-            password=db_pass,
-            port=db_port
-        )
-        cursor = conn.cursor()
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
-        cursor.close()
-        conn.close()
-        print(f"Database '{db_name}' ensured.")
-    except Exception as e:
-        print(f"Error checking/creating database: {e}")
-        print("Continuing database seeding (assuming SQLite mode or pre-existing database)...")
+            conn = pymysql.connect(
+                host=db_host,
+                user=db_user,
+                password=db_pass,
+                port=db_port
+            )
+            cursor = conn.cursor()
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
+            cursor.close()
+            conn.close()
+            print(f"Database '{db_name}' ensured.")
+        except Exception as e:
+            print(f"Error checking/creating database: {e}")
+            print("Continuing database seeding (assuming SQLite mode or pre-existing database)...")
 
     print("Connecting to the database and dropping tables to ensure fresh seed...")
     try:
